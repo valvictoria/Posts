@@ -1,2 +1,2 @@
 
-export const Auth = () => <>Авторизация</>
+export const AuthPage = () => <>Авторизация</>

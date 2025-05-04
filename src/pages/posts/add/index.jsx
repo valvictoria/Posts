@@ -1,2 +1,2 @@
 
-export const AddPost = () => <>Добавление поста</>
+export const AddPostPage = () => <>Добавление поста</>
