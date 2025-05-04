@@ -18,11 +18,11 @@ export const postsSlice = createSlice({
 
     },
     addPost: (state, action) => {
-        
+
     }
   },
 })
 
-export const { increment, decrement, incrementByAmount } = postsSlice.actions
+export const { setPosts, editPost, getPost, addPost } = postsSlice.actions
 
 export default postsSlice.reducer
