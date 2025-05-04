@@ -30,8 +30,6 @@ export const MenuItem = styled(NavLink)`
         background-color: #e9ecef;
         border-radius: 10px;
     }
-
-    
 `
 
 
