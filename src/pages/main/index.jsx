@@ -1,32 +1,36 @@
 import { Posts } from "../../components/Posts"
 import { Container } from '../../components/Container'
 import { Typo } from "../../components/Typo"
-
-const INITIAL_POST = [
-    {
-        id: 1,
-        title: 'Post 1',
-        image: 'https://sun9-68.userapi.com/impg/YCk3zPhjcR5tYsaQgvtmpS_vTyrVw9hj1ZaHmA/JmmB6hLj-kg.jpg?size=1200x900&quality=95&sign=1b196aedcab485a81ecbe69f82e23230&c_uniq_tag=fJn82SNyrZy04qXwWPN00_RTcl1-SacQ8jWUETQBZPo&type=album'
-    },
-    {
-        id: 2,
-        title: 'Post 2',
-        image: 'https://sun9-68.userapi.com/impg/YCk3zPhjcR5tYsaQgvtmpS_vTyrVw9hj1ZaHmA/JmmB6hLj-kg.jpg?size=1200x900&quality=95&sign=1b196aedcab485a81ecbe69f82e23230&c_uniq_tag=fJn82SNyrZy04qXwWPN00_RTcl1-SacQ8jWUETQBZPo&type=album'
-    },
-    {
-        id: 3,
-        title: 'Post 3',
-        image: 'https://sun9-68.userapi.com/impg/YCk3zPhjcR5tYsaQgvtmpS_vTyrVw9hj1ZaHmA/JmmB6hLj-kg.jpg?size=1200x900&quality=95&sign=1b196aedcab485a81ecbe69f82e23230&c_uniq_tag=fJn82SNyrZy04qXwWPN00_RTcl1-SacQ8jWUETQBZPo&type=album'
-    },
-]
+import { useDispatch, useSelector } from "react-redux"
+import { useEffect } from "react"
+import { getFreshPosts } from "../../redux/slices/postsSlice"
 
 export const MainPage = () => {
+    const dispatch = useDispatch()
+
+    const postForView = useSelector((state) => state.posts.postForView)
+    const freshPosts = useSelector((state) => state.posts.freshPosts)
+
+    useEffect(() => {
+        dispatch(getFreshPosts())
+    }, [])
+    
     return (
         <>
             <Container>
-                <Typo>Свежие публикации</Typo>
-                <Posts posts={INITIAL_POST} />
-            </Container> 
+                {freshPosts && 
+                <>
+                    <Typo>Свежие публикации</Typo>
+                    <Posts posts={freshPosts} />
+                </>
+                }
+                {postForView && 
+                <>
+                    <Typo>Последний просмотренный пост:</Typo>
+                    <Posts posts={[postForView]} />
+                </>
+                }
+            </Container>
         </>
     )
 }

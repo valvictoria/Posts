@@ -1,9 +1,7 @@
 import * as SC from './styles'
 
-export const Link = ({ simple = true, children, ...props }) => {
+export const Link = ({ children, ...props }) => {
     return (
-        simple 
-        ? <SC.SimpleLink {...props}>{children}</SC.SimpleLink> 
-        : <SC.Navigationlink {...props}>{children}</SC.Navigationlink>
+         <SC.SimpleLink {...props}>{children}</SC.SimpleLink> 
     )
 }
