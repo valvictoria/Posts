@@ -7,7 +7,7 @@ export const Menu = styled.div`
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
-    max-width: 550px;
+    max-width: 800px;
     margin: 20px auto;
     padding: 10px;
     background: #f8f9fa;
