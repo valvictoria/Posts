@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 export const Post = styled.div`
@@ -6,10 +5,12 @@ export const Post = styled.div`
     flex-direction: column;
     gap: 15px;
     justify-content: space-between;
+    min-width: 300px;
+    flex: 1 1;
 `
 
 export const Image = styled.img`
-    max-width: 200px;
+    max-width: 300px;
 `
 
 export const Title = styled.div`
