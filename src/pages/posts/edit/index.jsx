@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { PostForm } from '../component/PostForm'
-import { editPost, getPostById } from '../../../redux/slices/postsSlice'
+import { editPost } from '../../../redux/slices/postsSlice'
 
 export const EditPostPage = () => {
     const dispatch = useDispatch()
