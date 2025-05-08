@@ -1,18 +1,29 @@
-import { useParams } from "react-router-dom"
-import { useEffect } from "react"
+import { useParams, useNavigate } from "react-router-dom"
+import { useEffect, useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { Typo } from "../../../components/Typo"
 import { Container } from "../../../components/Container"
 import { Link } from "../../../components/Link"
-import { getPostById, showPost } from "../../../redux/slices/postsSlice"
+import { getPostById, showPost, deletePost } from "../../../redux/slices/postsSlice"
 
 import * as SC from './styles'
 
 export const DetailPostPage = () => {
     const { id } = useParams()
+    const dispatch = useDispatch()
+
+    const navigate = useNavigate()
+
     const { list } = useSelector((state) => state.posts.posts)
     const postForView = useSelector((state) => state.posts.postForView)
-    const dispatch = useDispatch()
+
+    const [postForDelete, setPostForDelete] = useState(null)
+
+    const onDeletePost = () => {
+        dispatch(deletePost(postForDelete))
+        setPostForDelete(null)
+        navigate('/posts')
+    }
 
     useEffect(() => {
         const intId = Number(id)
@@ -35,17 +46,27 @@ export const DetailPostPage = () => {
     }
 
     const { post } = postForView
-    const image = post.image || 'https://lapkins.ru/upload/iblock/401/40164de2367cfa4761592b2b57ec0fac.jpg'
+    const image = post.image || 'https://img.freepik.com/premium-vector/cute-pembroke-welsh-corgi-dog-cartoon-vector-illustrationx9_42750-1332.jpg'
 
     return (
         <Container>
+            {postForDelete && <SC.ModalWrapper>
+                <SC.Modal>
+                    <SC.ModalText>Вы точно уверены, что хотите удалить публикацию с ID - {postForDelete.id}?</SC.ModalText>
+                    <SC.ModalContent>
+                        <SC.DeleteButton onClick={onDeletePost}>Да</SC.DeleteButton>
+                        <SC.NoButton onClick={() => setPostForDelete(null)}>Нет</SC.NoButton>
+                    </SC.ModalContent>
+                </SC.Modal>
+            </SC.ModalWrapper>}
             <Typo>{post.title}</Typo>
             <SC.Image src={image} alt={post.title} />
             <SC.Text>{post.body}</SC.Text>
             <div style={{ clear: 'both' }}></div>
             <SC.LinkWrapper>
-                <Link to='/posts'>Обратно к публикациям</Link>
-                <Link to={`/posts/${post.id}/edit`}>Редактировать</Link>
+                {list && <Link to='/posts'>Обратно к публикациям</Link>}
+                {list && <Link to={`/posts/${post.id}/edit`}>Редактировать</Link>}
+                <SC.DeleteButton onClick={() => setPostForDelete(post)}>Удалить пост</SC.DeleteButton>
             </SC.LinkWrapper>
         </Container>
     )
