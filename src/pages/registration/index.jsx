@@ -6,8 +6,13 @@ import { Input } from '../../components/ui/Input'
 import { Form } from '../../components/ui/Form'
 import { Field } from '../../components/ui/Field'
 import { Button } from '../../components/ui/Button'
+import { Modal } from '../../components/ui/Modal'
+import { CloseButton } from '../../components/ui/CloseButton'
 
 export const RegistrationPage = () => {
+    const navigate = useNavigate()
+    const userId = Date.now()
+
     const [formValues, setFormValues] = useState(
         {   
             name: '', 
@@ -16,8 +21,8 @@ export const RegistrationPage = () => {
             password: '' 
         }
     )
-    const navigate = useNavigate()
-    const userId = Date.now()
+    const [modalActive, setModalActive] = useState(false)
+    const [message, setMessage] = useState('')
 
     const onChange = (name, value) => {
         setFormValues({ ...formValues, [name]: value })
@@ -31,19 +36,24 @@ export const RegistrationPage = () => {
 
             if (!users) {
                 localStorage.setItem('users', JSON.stringify([newUser]))
-                alert('Вы успешно зарегистрировались')
+                setModalActive(true)
+                setMessage('Вы успешно зарегистрировались')
                 navigate('/auth')            
                 return
             } 
 
             if (users.find((user) => user.email === formValues.email)) {
-                alert('Пользователь с таким E-mail уже существует')
+                setModalActive(true)
+                setMessage('Пользователь с таким E-mail уже существует')
                 return
             }
 
             users.push(newUser)
+
             localStorage.setItem('users', JSON.stringify(users))
-            alert('Вы успешно зарегистрировались')
+
+            setModalActive(true)
+            setMessage('Вы успешно зарегистрировались')
             navigate('/auth')
         } catch (e) {
             console.log(e)
@@ -92,6 +102,11 @@ export const RegistrationPage = () => {
                 </Field>
                 <Button type='submit' disabled={disabled}>Регистрация</Button>
             </Form>
+            {modalActive && (
+                <Modal title={message}>
+                    <CloseButton onClick={() => setModalActive(false)}>Закрыть</CloseButton>
+                </Modal>
+            )}
         </Container>
     )
 }

@@ -1,9 +1,10 @@
-import { Posts } from "../../components/Posts"
-import { Container } from '../../components/ui/Container'
-import { Typo } from "../../components/ui/Typo"
 import { useDispatch, useSelector } from "react-redux"
 import { useEffect } from "react"
 import { getFreshPosts } from "../../redux/slices/postsSlice"
+import { Loader } from "../../components/ui/Loader"
+import { Posts } from "../../components/Posts"
+import { Container } from '../../components/ui/Container'
+import { Typo } from "../../components/ui/Typo"
 
 export const MainPage = () => {
     const dispatch = useDispatch()
@@ -12,13 +13,15 @@ export const MainPage = () => {
     const { posts, loading } = useSelector((state) => state.posts.freshPosts)
 
     useEffect(() => {
-        dispatch(getFreshPosts())
-    }, [dispatch])
+        if (!posts) {
+            dispatch(getFreshPosts())
+        }       
+    }, [dispatch, posts])
     
     return (
         <>
             <Container>
-                {loading && <>Loading</>}
+                {loading && <Loader />}
                 {posts && 
                 <>
                     <Typo>Свежие публикации</Typo>
