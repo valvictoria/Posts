@@ -1,10 +1,12 @@
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { PostForm } from '../component/PostForm'
 import { editPost } from '../../../redux/slices/postsSlice'
 
 export const EditPostPage = () => {
     const dispatch = useDispatch()
+    const navigate = useNavigate()
+
     const { id } = useParams()
     const { list } = useSelector((state) => state.posts.posts)
 
@@ -16,6 +18,7 @@ export const EditPostPage = () => {
 
     const onSubmitForm = (formValues) => {
         dispatch(editPost(formValues))
+        navigate('/posts')
     }
 
     return (

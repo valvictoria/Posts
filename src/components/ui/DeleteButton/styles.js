@@ -1,21 +1,21 @@
 import styled from "styled-components";
 
-export const Button = styled.button`
-    padding: 10px 20px;
-    background-color: #0077b6;
-    color: white;
+export const DeleteButton = styled.button`
+    padding: 8px 12px;
+    background-color: #edf6f9;
+    color: #3D405B;
     border: none;
-    border-radius: 12px;
+    border-radius: 8px;
     font-size: 16px;
     font-weight: 500;
     cursor: pointer;
     transition: background-color 0.2s ease;
+    align-self: center;
     max-width: 150px;
     width: 100%;
-    align-self: center;
 
     &:hover {
-        background-color: #023e8a;
+        background-color: #EEB9AA;
     }
 
     &:active {

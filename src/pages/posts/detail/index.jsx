@@ -1,10 +1,14 @@
 import { useParams, useNavigate } from "react-router-dom"
 import { useEffect, useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
+import { getPostById, showPost, deletePost } from "../../../redux/slices/postsSlice"
 import { Typo } from "../../../components/ui/Typo"
 import { Container } from "../../../components/ui/Container"
 import { Link } from "../../../components/ui/Link"
-import { getPostById, showPost, deletePost } from "../../../redux/slices/postsSlice"
+import { DeleteButton } from "../../../components/ui/DeleteButton"
+import { Loader } from "../../../components/ui/Loader"
+import { CloseButton } from "../../../components/ui/CloseButton"
+import { Modal } from '../../../components/ui/Modal'
 
 import * as SC from './styles'
 
@@ -41,11 +45,21 @@ export const DetailPostPage = () => {
     }, [id, list, dispatch])
 
     if (postForView.loading) {
-        return <Container>Loading...</Container>
+        return (
+            <Container>
+                <Loader />
+            </Container>
+        )
     }
 
     if (!postForView.post || !postForView.post.hasOwnProperty('id')) {
-        return <Container>Пост не найден</Container>
+        return (
+            <Container>
+                <Modal title={'Ошибка при загрузке данных'}>
+                    <CloseButton onClick={() => navigate('/posts')}>К публикациям</CloseButton>
+                </Modal>
+            </Container>
+        )
     }
 
     const { post } = postForView
@@ -53,15 +67,12 @@ export const DetailPostPage = () => {
 
     return (
         <Container>
-            {postForDelete && <SC.ModalWrapper>
-                <SC.Modal>
-                    <SC.ModalText>Вы точно уверены, что хотите удалить публикацию с ID - {postForDelete.id}?</SC.ModalText>
-                    <SC.ModalContent>
-                        <SC.DeleteButton onClick={onDeletePost}>Да</SC.DeleteButton>
-                        <SC.NoButton onClick={() => setPostForDelete(null)}>Нет</SC.NoButton>
-                    </SC.ModalContent>
-                </SC.Modal>
-            </SC.ModalWrapper>}
+            {postForDelete &&
+                <Modal title={`Вы точно уверены, что хотите удалить публикацию с ID - ${postForDelete.id}?`}>
+                    <DeleteButton onClick={onDeletePost}>Да</DeleteButton>
+                    <CloseButton onClick={() => setPostForDelete(null)}>Нет</CloseButton>
+                </Modal>
+            }
             <Typo>{post.title}</Typo>
             <SC.Image src={image} alt={post.title} />
             <SC.Text>{post.body}</SC.Text>
@@ -69,7 +80,7 @@ export const DetailPostPage = () => {
             <SC.LinkWrapper>
                 {list && <Link to='/posts'>Обратно к публикациям</Link>}
                 {showEditAndDeleteBtn && <Link to={`/posts/${post.id}/edit`}>Редактировать</Link>}
-                {showEditAndDeleteBtn && <SC.DeleteButton onClick={() => setPostForDelete(post)}>Удалить пост</SC.DeleteButton>}
+                {showEditAndDeleteBtn && <DeleteButton onClick={() => setPostForDelete(post)}>Удалить пост</DeleteButton>}
             </SC.LinkWrapper>
         </Container>
     )

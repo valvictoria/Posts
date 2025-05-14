@@ -8,17 +8,22 @@ import { Form } from "../../components/ui/Form"
 import { Field } from "../../components/ui/Field"
 import { Input } from "../../components/ui/Input"
 import { Button } from "../../components/ui/Button"
+import { Modal } from '../../components/ui/Modal'
+import { CloseButton } from "../../components/ui/CloseButton"
 
 export const AuthPage = () => {
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
+
     const [formValues, setFormValues] = useState(
         {
             email: '',
             password: ''
         }
     )
-    const navigate = useNavigate()
-    const dispatch = useDispatch()
-
+    const [modalActive, setModalActive] = useState(false)
+    const [message, setMessage] = useState('')
+    
     const onChange = (name, value) => {
         setFormValues({ ...formValues, [name]: value })
     }
@@ -29,14 +34,16 @@ export const AuthPage = () => {
             const users = JSON.parse(localStorage.getItem('users'))
 
             if (!users) {
-                alert('Данный пользователь не найден в системе')
+                setModalActive(true)
+                setMessage('Данный пользователь не найден в системе')
                 return
             }
 
             const currentUser = users.find((user) => user.email === formValues.email && user.password === formValues.password)
 
             if (!currentUser) {
-                alert('Данный пользователь не найден в системе')
+                setModalActive(true)
+                setMessage('Данный пользователь не найден в системе')
                 return
             }
 
@@ -74,5 +81,10 @@ export const AuthPage = () => {
             </Field>
             <Button type='submit' disabled={disabled}>Авторизация</Button>
         </Form>
+        {modalActive && (
+            <Modal title={message}>
+                <CloseButton onClick={() => setModalActive(false)}>Закрыть</CloseButton>
+            </Modal>
+        )}
     </Container>
 }
