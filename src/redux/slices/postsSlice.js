@@ -14,6 +14,12 @@ const initialState = {
     posts: null,
     loading: false
   },
+  ui: {
+    currentPage: 1,
+    filter: '',
+    sort: 'asc',
+    itemsPerPage: 9
+  }
 }
 
 export const getPostById = createAsyncThunk(
@@ -67,6 +73,16 @@ export const postsSlice = createSlice({
         post: null,
         loading: false
       }
+    },
+    setCurrentPage: (state, action) => {
+      state.ui.currentPage = action.payload
+    },
+    setFilter: (state, action) => {
+      state.ui.filter = action.payload,
+      state.ui.currentPage = 1
+    },
+    setSort: (state, action) => {
+      state.ui.sort = action.payload
     }
   },
   extraReducers: (builder) => {
@@ -109,6 +125,13 @@ export const postsSlice = createSlice({
   }
 })
 
-export const { editPost, addPost, showPost, deletePost } = postsSlice.actions
+export const { 
+  editPost, 
+  addPost, 
+  showPost, 
+  deletePost, 
+  setCurrentPage, 
+  setFilter, 
+  setSort } = postsSlice.actions
 
 export default postsSlice.reducer

@@ -19,46 +19,28 @@ export const PostsPage = () => {
 
     const { list, loading } = useSelector((state) => state.posts.posts)
 
-    const [currentPage, setCurrentPage] = useState(1)
-    const [filteredPosts, setFilteredPosts] = useState('')
-    const [sortPosts, setSortPosts] = useState('asc')
-
-    const quantityPerPage = 9
-
+    const { filter, sort, currentPage, itemsPerPage } = useSelector((state) => state.posts.ui)
 
     const filteredAndSortedPost = list ?
         list
-            .filter((post) => post.title.toLowerCase().includes(filteredPosts.toLowerCase()))
+            .filter((post) => post.title.toLowerCase().includes(filter.toLowerCase()))
             .sort((a, b) => {
-                if (sortPosts === 'asc') {
-                    return a.title.localeCompare(b.title) // Сортировка по возрастанию (А-Я)
+                if (sort === 'asc') {
+                    return a.title.localeCompare(b.title) 
                 } else {
-                    return b.title.localeCompare(a.title) // Сортировка по убыванию (Я-А)
+                    return b.title.localeCompare(a.title) 
                 }
             })
         : []
 
-    const totalPages = Math.ceil(filteredAndSortedPost.length / quantityPerPage)
+    const totalPages = Math.ceil(filteredAndSortedPost.length / itemsPerPage)
 
-    const lastIndexPostsCurrentPage = currentPage * quantityPerPage
-    const firstIndexPostsCurrentPage = lastIndexPostsCurrentPage - quantityPerPage
+    const lastIndexPostsCurrentPage = currentPage * itemsPerPage
+    const firstIndexPostsCurrentPage = lastIndexPostsCurrentPage - itemsPerPage
     const postsOnCurrentPage = filteredAndSortedPost.slice(
         firstIndexPostsCurrentPage,
         lastIndexPostsCurrentPage
     )
-
-    const onPageChange = (page) => {
-        setCurrentPage(page)
-    }
-
-    const onFilterChange = (e) => {
-        setFilteredPosts(e.target.value)
-        setCurrentPage(1)
-    }
-
-    const onSortChange = (e) => {
-        setSortPosts(e.target.value)
-    }
 
     useEffect(() => {
         if (!list) {
@@ -88,22 +70,11 @@ export const PostsPage = () => {
         <Container>
             <Typo>Публикации</Typo>
             <Wrapper>
-                <Filter
-                    placeholder={'Введите название'}
-                    value={filteredPosts}
-                    onChange={onFilterChange}
-                />
-                <Sort
-                    value={sortPosts}
-                    onChange={onSortChange}
-                />
+                <Filter placeholder={'Введите название'}/>
+                <Sort/>
             </Wrapper>
             <Posts posts={postsOnCurrentPage} />
-            <Pagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPageChange={onPageChange}
-            />
+            <Pagination totalPages={totalPages} />
         </Container>
     )
 }
